@@ -1,0 +1,3 @@
+ID,StartDate,EndDate,PaymentAmount,PaymentFrequency,DiscountRate
+L001,2023-01-01,2027-12-31,5000,Monthly,0.05
+L002,2023-02-01,2026-01-31,10000,Quarterly,0.045 

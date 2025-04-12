@@ -1,0 +1,232 @@
+{{define "title"}}Calculate - IFRS 16 Lease Calculator{{end}}
+
+{{define "header"}}Calculate Lease Values{{end}}
+
+{{define "content"}}
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">Upload Lease Data</h2>
+        <button id="help-btn" class="btn btn-outline" onclick="document.getElementById('help-modal').style.display='block'">
+            <span class="icon">❓</span> Need Help?
+        </button>
+    </div>
+    <p>Upload a CSV or Excel file containing your lease data to calculate IFRS 16 values.</p>
+    
+    <form id="calculate-form" action="/calculate" method="post" enctype="multipart/form-data" class="calculate-form" onsubmit="return handleFormSubmit(event);">
+        <div class="form-group">
+            <label for="leaseFile" class="form-label">Select File</label>
+            <div class="file-upload">
+                <div class="file-upload-icon">📂</div>
+                <div class="file-upload-text">Click or drag a file here to upload</div>
+                <input type="file" name="leaseFile" id="leaseFile" class="file-upload-input" accept=".csv,.xlsx" required>
+            </div>
+            <div class="form-text">
+                Accepted formats: CSV, XLSX (Excel)
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <input type="checkbox" id="skipHeader" name="skipHeader" class="form-check-input">
+            <label for="skipHeader" class="form-check-label">Skip header row</label>
+            <div class="form-text">Check this box if your file has a header row that should be skipped.</div>
+        </div>
+        
+        <!-- 添加账期范围选择 -->
+        <div class="form-section" style="margin-top: 20px; border-top: 1px solid var(--border-light); padding-top: 20px;">
+            <h3 style="margin-bottom: 15px;">账期设置 (可选)</h3>
+            <p class="form-text">如需生成特定账期的摘要报告,请选择账期开始和结束日期。如不选择,将展示整个租赁期间的摘要。</p>
+            
+            <div class="form-group" style="display: flex; gap: 15px; margin-top: 10px;">
+                <div>
+                    <label for="accountingPeriodStart">账期开始日期:</label>
+                    <input type="date" id="accountingPeriodStart" name="accountingPeriodStart" class="form-control">
+                </div>
+                <div>
+                    <label for="accountingPeriodEnd">账期结束日期:</label>
+                    <input type="date" id="accountingPeriodEnd" name="accountingPeriodEnd" class="form-control">
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Calculate</button>
+            <button type="reset" class="btn btn-outline">Reset</button>
+        </div>
+        
+        <div class="form-info" style="margin-top: 20px; font-size: 0.9rem; color: var(--text-secondary);">
+            <p>Having trouble with file upload? Make sure:</p>
+            <ul style="margin-left: 20px; margin-top: 5px;">
+                <li>Your file is in CSV or XLSX format</li>
+                <li>The file size is under 10MB</li>
+                <li>The file has all required columns (ID, StartDate, EndDate, PaymentAmount, PaymentFrequency, DiscountRate)</li>
+            </ul>
+        </div>
+    </form>
+</div>
+
+<div class="template-info card">
+    <div class="card-header">
+        <h2 class="card-title">File Format Requirements</h2>
+    </div>
+    <p>Your file should have the following columns in order:</p>
+    <ol>
+        <li><strong>ID</strong> - Unique identifier for the lease</li>
+        <li><strong>StartDate</strong> - Lease start date (YYYY-MM-DD)</li>
+        <li><strong>EndDate</strong> - Lease end date (YYYY-MM-DD)</li>
+        <li><strong>PaymentAmount</strong> - Regular payment amount</li>
+        <li><strong>PaymentFrequency</strong> - Payment frequency (Monthly, Quarterly, or Annually)</li>
+        <li><strong>DiscountRate</strong> - Incremental borrowing rate as decimal (e.g., 0.05 for 5%)</li>
+    </ol>
+    
+    <div class="template-download">
+        <p>Download a template file to get started:</p>
+        <a href="/static/templates/lease_template.xlsx" class="btn btn-outline">Excel Template</a>
+        <a href="/static/templates/lease_template.csv" class="btn btn-outline">CSV Template</a>
+    </div>
+</div>
+
+<div id="result-container" class="result-panel">
+    <!-- Results will be displayed here -->
+</div>
+
+<!-- Help Modal -->
+<div id="help-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>How to Use the IFRS 16 Calculator</h3>
+            <span class="close" onclick="document.getElementById('help-modal').style.display='none'">&times;</span>
+        </div>
+        <div class="modal-body">
+            <h4>Step 1: Prepare Your Data</h4>
+            <p>Your file must contain the following columns in this exact order:</p>
+            <ol>
+                <li><strong>ID</strong>: A unique identifier for each lease</li>
+                <li><strong>StartDate</strong>: The lease start date in YYYY-MM-DD format</li>
+                <li><strong>EndDate</strong>: The lease end date in YYYY-MM-DD format</li>
+                <li><strong>PaymentAmount</strong>: The regular payment amount (numeric)</li>
+                <li><strong>PaymentFrequency</strong>: Either "Monthly", "Quarterly", or "Annually"</li>
+                <li><strong>DiscountRate</strong>: The incremental borrowing rate as a decimal (e.g., 0.05 for 5%)</li>
+            </ol>
+            
+            <h4>Step 2: Download and Fill a Template</h4>
+            <p>For convenience, you can download a template file:</p>
+            <ul>
+                <li><a href="/static/templates/lease_template.xlsx" download>Excel Template (XLSX)</a></li>
+                <li><a href="/static/templates/lease_template.csv" download>CSV Template</a></li>
+            </ul>
+            
+            <h4>Step 3: Upload Your File</h4>
+            <p>Click on the upload area or drag and drop your file. Make sure it's either CSV or XLSX format.</p>
+            
+            <h4>Step 4: Calculate</h4>
+            <p>Click the Calculate button to process your file. The results will show below with details for each lease.</p>
+            
+            <h4>Step 5: Export Results</h4>
+            <p>You can export the calculation results to Excel for further analysis.</p>
+            
+            <h4>Common Issues</h4>
+            <ul>
+                <li>Make sure your file has the correct date format (YYYY-MM-DD)</li>
+                <li>Payment frequency must be exactly "Monthly", "Quarterly", or "Annually"</li>
+                <li>All fields are required and must be in the correct order</li>
+                <li>The maximum file size is 10MB</li>
+            </ul>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" onclick="document.getElementById('help-modal').style.display='none'">Got it!</button>
+        </div>
+    </div>
+</div>
+{{end}}
+
+{{define "head"}}
+<style>
+.calculate-form {
+    margin-top: 20px;
+}
+
+.form-actions {
+    margin-top: 24px;
+    display: flex;
+    gap: 12px;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.template-info {
+    margin-top: 30px;
+}
+
+.template-download {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.result-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.result-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.result-summary {
+    margin-bottom: 20px;
+}
+
+.form-text {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-top: 6px;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#help-btn {
+    padding: 5px 10px;
+    font-size: 0.85rem;
+}
+
+#help-btn .icon {
+    margin-right: 5px;
+}
+</style>
+{{end}}
+
+{{define "scripts"}}
+<script>
+// Helper function to handle form submission
+function handleFormSubmit(event) {
+    const resultContainer = document.getElementById('result-container');
+    const form = document.getElementById('calculate-form');
+    const fileInput = document.getElementById('leaseFile');
+    
+    // Basic validation
+    if (!fileInput.files || fileInput.files.length === 0) {
+        alert('Please select a file to upload');
+        return false;
+    }
+
+    // Show loading state
+    resultContainer.innerHTML = '<div class="card"><p>Processing...</p></div>';
+    
+    return true; // Allow the form to submit normally
+}
+</script>
+{{end}} 

@@ -1,0 +1,142 @@
+{{define "title"}}Troubleshooting - IFRS 16 Calculator{{end}}
+
+{{define "header"}}Troubleshooting{{end}}
+
+{{define "content"}}
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">Application Troubleshooting</h2>
+    </div>
+    <p>This page helps diagnose issues with the IFRS 16 Calculator application.</p>
+    
+    <div style="margin-top: 20px;">
+        <h3>System Information</h3>
+        <div id="system-info">Loading system information...</div>
+    </div>
+    
+    <div style="margin-top: 20px;">
+        <h3>Template Files Check</h3>
+        <div id="template-check">Loading template check...</div>
+    </div>
+    
+    <div style="margin-top: 20px;">
+        <h3>Upload Test</h3>
+        <form id="test-form" action="/calculate" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="testFile">Test file upload</label>
+                <input type="file" name="leaseFile" id="testFile" required>
+                <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Test Upload</button>
+            </div>
+        </form>
+        <div id="upload-result" style="margin-top: 10px;"></div>
+    </div>
+    
+    <div style="margin-top: 30px;">
+        <button id="check-btn" class="btn btn-primary">Run Diagnostics</button>
+        <button id="clear-btn" class="btn btn-outline" style="margin-left: 10px;">Clear Console</button>
+        <button id="refresh-btn" class="btn btn-outline" style="margin-left: 10px;">Refresh Page</button>
+    </div>
+</div>
+{{end}}
+
+{{define "scripts"}}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const systemInfo = document.getElementById('system-info');
+    const templateCheck = document.getElementById('template-check');
+    const uploadResult = document.getElementById('upload-result');
+    const checkBtn = document.getElementById('check-btn');
+    const clearBtn = document.getElementById('clear-btn');
+    const refreshBtn = document.getElementById('refresh-btn');
+    const testForm = document.getElementById('test-form');
+    
+    // Display system information
+    systemInfo.innerHTML = `
+        <ul>
+            <li>User Agent: ${navigator.userAgent}</li>
+            <li>Window Size: ${window.innerWidth}x${window.innerHeight}</li>
+            <li>Document Ready: ${document.readyState}</li>
+        </ul>
+    `;
+    
+    // Check template files
+    checkTemplateFiles();
+    
+    function checkTemplateFiles() {
+        templateCheck.innerHTML = 'Checking template files...';
+        
+        // Template paths to check
+        const files = [
+            '/static/templates/lease_template.csv',
+            '/static/templates/lease_template.xlsx'
+        ];
+        
+        let results = '<ul>';
+        let completedChecks = 0;
+        
+        files.forEach(file => {
+            const timestamp = new Date().getTime(); // Add cache-busting parameter
+            fetch(file + '?t=' + timestamp, { method: 'HEAD' })
+                .then(response => {
+                    results += `<li>${file}: ${response.ok ? '✅ Available' : '❌ Not Found'}</li>`;
+                    completedChecks++;
+                    if (completedChecks === files.length) {
+                        results += '</ul>';
+                        templateCheck.innerHTML = results;
+                    }
+                })
+                .catch(error => {
+                    results += `<li>${file}: ❌ Error - ${error.message}</li>`;
+                    completedChecks++;
+                    if (completedChecks === files.length) {
+                        results += '</ul>';
+                        templateCheck.innerHTML = results;
+                    }
+                });
+        });
+    }
+    
+    // Handle form submission
+    testForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        uploadResult.innerHTML = 'Testing upload...';
+        
+        const formData = new FormData(this);
+        fetch('/calculate', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Server returned ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            uploadResult.innerHTML = `<div class="alert alert-success">Upload successful! Server processed the request.</div>`;
+            console.log('Upload response:', data);
+        })
+        .catch(error => {
+            uploadResult.innerHTML = `<div class="alert alert-error">Upload failed: ${error.message}</div>`;
+            console.error('Upload error:', error);
+        });
+    });
+    
+    // Button event listeners
+    checkBtn.addEventListener('click', function() {
+        console.log('Running diagnostics...');
+        if (window.debugApp) window.debugApp();
+        checkTemplateFiles();
+    });
+    
+    clearBtn.addEventListener('click', function() {
+        console.clear();
+        console.log('Console cleared');
+    });
+    
+    refreshBtn.addEventListener('click', function() {
+        window.location.reload();
+    });
+});
+</script>
+{{end}} 

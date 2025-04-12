@@ -1,0 +1,203 @@
+{{define "title"}}Documentation - IFRS 16 Lease Calculator{{end}}
+
+{{define "header"}}Documentation{{end}}
+
+{{define "content"}}
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">IFRS 16 Overview</h2>
+    </div>
+    <p>
+        IFRS 16 "Leases" is an International Financial Reporting Standard that provides guidance on accounting for leases. 
+        The standard was issued by the International Accounting Standards Board (IASB) in January 2016 and has been effective 
+        since January 1, 2019.
+    </p>
+    <p style="margin-top: 16px;">
+        The core principle of IFRS 16 is that lessees recognize assets and liabilities for all leases with a term of more than 
+        12 months, unless the underlying asset is of low value. This represents a significant change from the previous standard 
+        (IAS 17) where lessees classified leases as either finance leases or operating leases.
+    </p>
+</div>
+
+<div class="card">
+    <div class="collapse-header">
+        <span>Key Concepts and Definitions</span>
+        <span class="collapse-icon">+</span>
+    </div>
+    <div class="collapse-body">
+        <h3>Lease</h3>
+        <p>A contract, or part of a contract, that conveys the right to use an asset (the underlying asset) for a period of time in exchange for consideration.</p>
+        
+        <h3>Lease Liability</h3>
+        <p>The obligation to make lease payments, measured at the present value of future lease payments.</p>
+        
+        <h3>Right-of-Use (RoU) Asset</h3>
+        <p>An asset representing the lessee's right to use the underlying leased asset for the lease term.</p>
+        
+        <h3>Incremental Borrowing Rate</h3>
+        <p>The rate of interest that a lessee would have to pay to borrow over a similar term, and with a similar security, the funds necessary to obtain an asset of similar value to the right-of-use asset in a similar economic environment.</p>
+        
+        <h3>Lease Term</h3>
+        <p>The non-cancellable period of a lease, plus periods covered by an option to extend or terminate if the lessee is reasonably certain to exercise or not exercise those options.</p>
+    </div>
+</div>
+
+<div class="card">
+    <div class="collapse-header">
+        <span>Calculation Methodology</span>
+        <span class="collapse-icon">+</span>
+    </div>
+    <div class="collapse-body">
+        <h3>Initial Recognition</h3>
+        <p><strong>Lease Liability</strong> = Present Value of Future Lease Payments</p>
+        <p>This calculator computes the lease liability using the present value formula based on:</p>
+        <ul>
+            <li>Lease payments (fixed amounts, including in-substance fixed payments)</li>
+            <li>Discount rate (incremental borrowing rate)</li>
+            <li>Lease term</li>
+            <li>Payment frequency (monthly, quarterly, or annually)</li>
+        </ul>
+        
+        <h3>Right-of-Use Asset</h3>
+        <p>Initially measured at cost, comprising:</p>
+        <ul>
+            <li>The amount of the initial measurement of the lease liability</li>
+            <li>Plus any lease payments made at or before the commencement date</li>
+            <li>Less any lease incentives received</li>
+            <li>Plus any initial direct costs incurred by the lessee</li>
+            <li>Plus an estimate of costs to be incurred in dismantling and removing the underlying asset</li>
+        </ul>
+        <p>In this calculator, we assume the RoU asset equals the lease liability at initial recognition for simplicity.</p>
+        
+        <h3>Subsequent Measurement</h3>
+        <p><strong>Lease Liability:</strong> Increased by interest accrued and reduced by lease payments made.</p>
+        <p><strong>Right-of-Use Asset:</strong> Depreciated on a straight-line basis over the lease term.</p>
+    </div>
+</div>
+
+<div class="card">
+    <div class="collapse-header">
+        <span>Accounting Entries</span>
+        <span class="collapse-icon">+</span>
+    </div>
+    <div class="collapse-body">
+        <h3>Initial Recognition</h3>
+        <pre>
+Dr  Right-of-Use Asset                 X
+    Cr  Lease Liability                    X
+(To recognize lease at commencement date)
+        </pre>
+        
+        <h3>Subsequent Measurement (Each Period)</h3>
+        <pre>
+Dr  Interest Expense                   X
+    Cr  Lease Liability                    X
+(To recognize interest expense)
+
+Dr  Lease Liability                    X
+    Cr  Cash/Bank                          X
+(To record lease payment)
+
+Dr  Depreciation Expense               X
+    Cr  Accumulated Depreciation           X
+(To recognize depreciation of RoU asset)
+        </pre>
+    </div>
+</div>
+
+<div class="card">
+    <div class="collapse-header">
+        <span>Using the Calculator</span>
+        <span class="collapse-icon">+</span>
+    </div>
+    <div class="collapse-body">
+        <h3>Prepare Your Data</h3>
+        <p>Create a CSV or Excel file with the following columns:</p>
+        <ol>
+            <li><strong>ID</strong> - Unique identifier for the lease</li>
+            <li><strong>StartDate</strong> - Lease start date (YYYY-MM-DD)</li>
+            <li><strong>EndDate</strong> - Lease end date (YYYY-MM-DD)</li>
+            <li><strong>PaymentAmount</strong> - Regular payment amount</li>
+            <li><strong>PaymentFrequency</strong> - Payment frequency (Monthly, Quarterly, or Annually)</li>
+            <li><strong>DiscountRate</strong> - Incremental borrowing rate as decimal (e.g., 0.05 for 5%)</li>
+        </ol>
+        
+        <h3>Upload and Calculate</h3>
+        <ol>
+            <li>Go to the <a href="/calculate">Calculate</a> page</li>
+            <li>Upload your prepared file</li>
+            <li>Click the Calculate button</li>
+            <li>Review the results displayed on the screen</li>
+            <li>Export to Excel for detailed analysis and reporting</li>
+        </ol>
+        
+        <h3>Interpret Results</h3>
+        <p>The calculator provides:</p>
+        <ul>
+            <li>Initial lease liability and RoU asset values</li>
+            <li>Amortization schedule for the lease liability showing interest expense and principal repayments</li>
+            <li>Depreciation schedule for the RoU asset</li>
+        </ul>
+    </div>
+</div>
+
+<div class="card">
+    <div class="collapse-header">
+        <span>References</span>
+        <span class="collapse-icon">+</span>
+    </div>
+    <div class="collapse-body">
+        <ul>
+            <li><a href="https://www.ifrs.org/issued-standards/list-of-standards/ifrs-16-leases/" target="_blank">IFRS 16 - Official Standard (IFRS Foundation)</a></li>
+            <li><a href="https://www.iasplus.com/en/standards/ifrs/ifrs-16" target="_blank">Deloitte IFRS 16 Summary</a></li>
+            <li><a href="https://www.pwc.com/gx/en/services/audit-assurance/ifrs-reporting/leases.html" target="_blank">PwC IFRS 16 Guide</a></li>
+        </ul>
+    </div>
+</div>
+{{end}}
+
+{{define "head"}}
+<style>
+.collapse-body h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.collapse-body h3:first-child {
+    margin-top: 0;
+}
+
+.collapse-body pre {
+    background-color: var(--bg-secondary);
+    padding: 12px;
+    border-radius: 4px;
+    overflow: auto;
+    font-family: monospace;
+    margin: 10px 0;
+}
+
+.collapse-body ul, .collapse-body ol {
+    margin-left: 20px;
+    margin-bottom: 16px;
+}
+
+.collapse-body p {
+    margin-bottom: 12px;
+}
+</style>
+{{end}}
+
+{{define "scripts"}}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Open the first collapse section by default
+    const firstCollapseHeader = document.querySelector('.collapse-header');
+    const firstCollapseBody = firstCollapseHeader.nextElementSibling;
+    
+    firstCollapseBody.classList.add('open');
+    firstCollapseHeader.querySelector('.collapse-icon').textContent = '-';
+});
+</script>
+{{end}} 

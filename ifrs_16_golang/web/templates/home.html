@@ -1,0 +1,103 @@
+{{define "title"}}IFRS 16 Lease Calculator{{end}}
+
+{{define "header"}}IFRS 16 Lease Calculator{{end}}
+
+{{define "content"}}
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">Welcome</h2>
+    </div>
+    <p>
+        This application helps you calculate IFRS 16 lease values and generate the required schedules for accounting purposes.
+    </p>
+    <div class="card-actions" style="margin-top: 16px;">
+        <a href="/calculate" class="btn btn-primary">Start Calculating</a>
+        <a href="/documentation" class="btn btn-outline">View Documentation</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">About IFRS 16</h2>
+    </div>
+    <p>
+        IFRS 16 is the International Financial Reporting Standard that sets out the principles for 
+        recognition, measurement, presentation and disclosure of leases. The standard was published 
+        by the International Accounting Standards Board (IASB) in January 2016 and became effective 
+        on January 1, 2019.
+    </p>
+    <p style="margin-top: 16px;">
+        Under IFRS 16, lessees are required to recognize assets and liabilities for all leases with a term 
+        of more than 12 months, unless the underlying asset is of low value. This involves:
+    </p>
+    <ul style="margin-left: 16px; margin-top: 8px;">
+        <li>Recognizing a right-of-use asset representing its right to use the underlying leased asset</li>
+        <li>Recognizing a lease liability representing its obligation to make lease payments</li>
+        <li>Recognizing depreciation of right-of-use assets and interest on lease liabilities in the income statement</li>
+    </ul>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">How to Use This Calculator</h2>
+    </div>
+    <ol style="margin-left: 16px;">
+        <li>Prepare your lease data in a CSV or Excel format</li>
+        <li>Upload your file on the Calculate page</li>
+        <li>Review the calculation results</li>
+        <li>Export the results to Excel for reporting and analysis</li>
+    </ol>
+    <div style="margin-top: 16px;">
+        <p>Required data format:</p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Field</th>
+                    <th>Description</th>
+                    <th>Format</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ID</td>
+                    <td>Unique lease identifier</td>
+                    <td>Text</td>
+                </tr>
+                <tr>
+                    <td>StartDate</td>
+                    <td>Lease start date</td>
+                    <td>YYYY-MM-DD</td>
+                </tr>
+                <tr>
+                    <td>EndDate</td>
+                    <td>Lease end date</td>
+                    <td>YYYY-MM-DD</td>
+                </tr>
+                <tr>
+                    <td>PaymentAmount</td>
+                    <td>Regular payment amount</td>
+                    <td>Numeric</td>
+                </tr>
+                <tr>
+                    <td>PaymentFrequency</td>
+                    <td>Payment frequency</td>
+                    <td>Monthly/Quarterly/Annually</td>
+                </tr>
+                <tr>
+                    <td>DiscountRate</td>
+                    <td>Incremental borrowing rate</td>
+                    <td>Decimal (e.g., 0.05 for 5%)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{{end}}
+
+{{define "head"}}
+<style>
+.card-actions {
+    margin-top: 20px;
+}
+</style>
+{{end}} 

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{template "title" .}}</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+    {{block "head" .}}{{end}}
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1>IFRS 16</h1>
+            </div>
+            <div class="sidebar-menu">
+                <a href="/" class="menu-item {{if eq .Active "home"}}active{{end}}">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/calculate" class="menu-item {{if eq .Active "calculate"}}active{{end}}">
+                    <span class="icon">🧮</span>
+                    <span>Calculate</span>
+                </a>
+                <a href="/documentation" class="menu-item {{if eq .Active "docs"}}active{{end}}">
+                    <span class="icon">📝</span>
+                    <span>Documentation</span>
+                </a>
+                <a href="/troubleshoot" class="menu-item {{if eq .Active "troubleshoot"}}active{{end}}">
+                    <span class="icon">🔧</span>
+                    <span>Troubleshoot</span>
+                </a>
+            </div>
+        </nav>
+        <main class="content">
+            <header class="content-header">
+                <h1>{{template "header" .}}</h1>
+            </header>
+            <div class="content-body">
+                {{template "content" .}}
+            </div>
+        </main>
+    </div>
+    <script src="/static/js/main.js"></script>
+    {{block "scripts" .}}{{end}}
+</body>
+</html> 
